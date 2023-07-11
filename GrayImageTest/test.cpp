@@ -168,16 +168,6 @@ TEST(GrayImage, Operator_product_with_image) {
 
 	// Act
 	auto actual = A * B;
-	uint8_t u = actual.getPixel(0, 0);
-	uint8_t u1 = actual.getPixel(0, 1);
-	uint8_t u2 = actual.getPixel(0, 2);
-	uint8_t u3 = actual.getPixel(0, 3);
-	uint8_t u4 = actual.getPixel(0, 4);
-	uint8_t u5 = actual.getPixel(1, 0);
-	uint8_t u6 = actual.getPixel(1, 1);
-	uint8_t u7 = actual.getPixel(1, 2);
-	uint8_t u8 = actual.getPixel(1, 3);
-	uint8_t u9 = actual.getPixel(1, 4);
 
 	// Assert
 	ASSERT_TRUE(actual == AxB);

@@ -25,13 +25,6 @@ GrayImage::GrayImage(int img_width, int img_height, std::vector<uint8_t> const& 
 		{
 			*(dst++) = data[i];
 		}
-		/*for (int y = 0; y < _height; y++)
-		{
-			for (int x = 0; x < _width; x++)
-			{
-				setPixel(y, x, data[y*_stride+x]);
-			}
-		}*/
 	}
 	_refCount = new size_t;
 	*_refCount = 1;
@@ -317,22 +310,6 @@ bool GrayImage::operator==(uint8_t const& value)const
 	}
 	return true;
 }
-//void GrayImage::save(string const& path) const
-//{
-//	ofstream ofs(path,ios::binary);
-//	ofs.write((char*)&width,sizeof width);
-//	ofs.write((char*)&height, sizeof height);
-//	ofs.write((char*)image, width * height);
-//	ofs.flush();
-//	ofs.close();
-//}
-//void GrayImage::load(string const& path)
-//{
-//	ifstream ifs(path, ios::binary);
-//	ifs.read((char*)&width, sizeof width);
-//	ifs.read((char*)&height, sizeof height);
-//	ifs.read((char*)image, (sizeof(uint8_t) * width * height));
-//}
 
 template <typename T>
 void WriteBytes(std::ofstream& ofs, T t) {
@@ -378,7 +355,23 @@ void GrayImage::saveToBMP(std::string const& filepath)const
 	}
 }
 
-
+//not usefull functions
+//void GrayImage::save(string const& path) const
+//{
+//	ofstream ofs(path,ios::binary);
+//	ofs.write((char*)&width,sizeof width);
+//	ofs.write((char*)&height, sizeof height);
+//	ofs.write((char*)image, width * height);
+//	ofs.flush();
+//	ofs.close();
+//}
+//void GrayImage::load(string const& path)
+//{
+//	ifstream ifs(path, ios::binary);
+//	ifs.read((char*)&width, sizeof width);
+//	ifs.read((char*)&height, sizeof height);
+//	ifs.read((char*)image, (sizeof(uint8_t) * width * height));
+//}
 //void GrayImage::copyTo(GrayImage& other, int y, int x)
 //{
 //	if (!other.isOwner)
