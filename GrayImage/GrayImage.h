@@ -14,7 +14,7 @@ private:
 	int _width;
 	int _height;
 	int _stride;
-	size_t* _refCount;
+	size_t* _refCount=nullptr;
 
 public:
 	// Default c'tor. sets _data and _refCount to nullptr:
@@ -23,7 +23,7 @@ public:
 	// if this last "data" parameter is given, it must be of size width*height, and its values
 	// are copied to the _data member.
 	//
-	GrayImage(int img_width, int img_height, std::vector<uint8_t> const& data);
+	GrayImage(int img_width, int img_height, std::vector<uint8_t> const& data={});
 	// View c'tor stays the same
 	GrayImage(GrayImage const& other, int row, int col, int ROI_width, int ROI_height);
 	// copy c'tor
@@ -41,7 +41,7 @@ public:
 
 	// Implicit conversion to std::vector
 	// (if you haven't done implicit conversions lesson & exercise in C++, that's the time.)
-	//operator std::vector<uint8_t>() const;
+	operator std::vector<uint8_t>() const;
 
 	int getWidth() const;
 	int getHeight() const;

@@ -12,7 +12,7 @@ GrayImage::GrayImage()
 	_refCount = nullptr;
 }
 
-GrayImage::GrayImage(int img_width, int img_height, std::vector<uint8_t> const& data = {})
+GrayImage::GrayImage(int img_width, int img_height, std::vector<uint8_t> const& data)
 {
 	_stride = img_width;
 	_width = img_width;
@@ -20,13 +20,18 @@ GrayImage::GrayImage(int img_width, int img_height, std::vector<uint8_t> const& 
 	_data = new uint8_t[_width * _height];
 	if (!data.empty())
 	{
-		for (int y = 0; y < _height; y++)
+		uint8_t* dst=_data;
+		for (int i = 0; i < _width * _height; i++)
+		{
+			*(dst++) = data[i];
+		}
+		/*for (int y = 0; y < _height; y++)
 		{
 			for (int x = 0; x < _width; x++)
 			{
 				setPixel(y, x, data[y*_stride+x]);
 			}
-		}
+		}*/
 	}
 	_refCount = new size_t;
 	*_refCount = 1;
@@ -47,12 +52,11 @@ GrayImage::GrayImage(GrayImage const& source)
 	_width = source._width;
 	_height = source._height;
 	_stride = source._stride;
-	
-	if (_data != nullptr)
-	{
-		if (--(*_refCount) == 0)
-			delete[]_data;
-	}
+	bool f = _refCount == nullptr;		
+	if (_refCount != nullptr&&--(*_refCount) == 0)
+		{
+			delete[] _data;
+		}
 	_refCount = source._refCount;
 	_data = source._data;
 	(*_refCount)++;
@@ -63,12 +67,11 @@ GrayImage const& GrayImage::operator=(GrayImage const& other)
 	_width = other._width;
 	_height = other._height;
 	_stride = other._stride;
-	_refCount = other._refCount;
-	if (_data != nullptr)
+	if (_refCount != nullptr && --(*_refCount) == 0)
 	{
-		if (--(*_refCount) == 0)
-			delete[]_data;
+		delete[] _data;
 	}
+	_refCount = other._refCount;
 	_data = other._data;
 	(*_refCount)++;
 	return *this;
@@ -76,11 +79,6 @@ GrayImage const& GrayImage::operator=(GrayImage const& other)
 
 GrayImage const& GrayImage::operator=(uint8_t const& value)
 {
-	if (_data != nullptr)
-	{
-		if (--(*_refCount) == 0)
-			delete[]_data;
-	}
 	uint8_t* dst_ptr, * src1_ptr, * src2_ptr;
 	for (int y = 0; y < _height; y++)
 	{
@@ -98,8 +96,10 @@ GrayImage::GrayImage(GrayImage&& source)noexcept
 	_width = source._width;
 	_height = source._height;
 	_stride = source._stride;
+	_refCount = source._refCount;
 	_data = source._data;
-	source._data = nullptr;
+	if(*source._refCount==1)
+		source._data = nullptr;
 }
 
 GrayImage::~GrayImage()
@@ -108,11 +108,25 @@ GrayImage::~GrayImage()
 	{
 		delete[]_data;
 		delete _refCount;
-	}
-
+	}	
 }
 
-//TODO implicit converssion
+GrayImage::operator std::vector<uint8_t>() const
+{
+	std::vector<uint8_t> imageData(_width * _height);
+	uint8_t* src;
+	for (int y = 0; y < _height; y++)
+	{
+		src = _data + y * _stride;
+		for (int x = 0; x < _width; x++)
+		{
+			imageData[y * _width + x] = *(src++);
+		}
+	}
+
+	return imageData;
+}
+
 
 int GrayImage::getWidth() const
 {
@@ -227,28 +241,28 @@ GrayImage GrayImage::absdiff(const GrayImage& other) const
 		src2_ptr = other._data + y * _stride;
 		for (int x = 0; x < _width; x++)
 		{
-			if (*(src1_ptr++) - *(src2_ptr++)>0)
-				*(dst_ptr++) = *(src1_ptr++) - *(src2_ptr++);
-			else
-				*(dst_ptr++) = *(src2_ptr++) - *(src1_ptr++);
+			int diff = *(src1_ptr++) - *(src2_ptr++);
+			*(dst_ptr++) = (diff > 0) ? diff : -diff;
 		}
 	}
 	return newImage;
 }
 
-GrayImage GrayImage::operator*(const GrayImage& other)const
+GrayImage GrayImage::operator*(const GrayImage& other) const
 {
 	if (_width != other._height)
-		throw "The width and height do not much";
+		throw "The width and height do not match";
 	GrayImage newImage(other._width, _height);
-	int sum;
+	uint8_t sum;
 	for (int y = 0; y < _height; y++)
 	{
-		for (int x = 0; x < _width; x++)
+		for (int x = 0; x < other._width; x++)
 		{
 			sum = 0;
 			for (int i = 0; i < _width; i++)
-				sum += (getPixel(i, x) * other.getPixel(y, i));
+			{
+				sum += getPixel(y, i)* other.getPixel(i, x);
+			}
 			newImage.setPixel(y, x, sum);
 		}
 	}

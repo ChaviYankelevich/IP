@@ -1,5 +1,5 @@
 ﻿  GrayImage.cpp
-C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(84,22): warning C4101: 'src1_ptr': unreferenced local variable
-C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(84,34): warning C4101: 'src2_ptr': unreferenced local variable
-C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(292,23): warning C4101: 'src2_ptr': unreferenced local variable
+C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(82,22): warning C4101: 'src1_ptr': unreferenced local variable
+C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(82,34): warning C4101: 'src2_ptr': unreferenced local variable
+C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\GrayImage\GrayImage.cpp(308,23): warning C4101: 'src2_ptr': unreferenced local variable
   GrayImage.vcxproj -> C:\Users\USER\Documents\תכנות שנה ב\GrayImage\GrayImage\x64\Debug\GrayImage.lib
